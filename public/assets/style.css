@@ -165,6 +165,12 @@ p:last-child { margin-bottom: 0; }
 
 .section--bleed { padding-top: clamp(3rem, 6vw, 5rem); }
 
+/* About + the metrics strip that follows form one intro "deck" — lift both
+   to cream-soft together so the eye reads them as a single block, then
+   returns to default cream for the Practice section. */
+.section--bleed,
+.section--bleed + .section--tight { background: var(--cream-soft); }
+
 .section--alt { background: var(--cream-soft); }
 
 .section--practice { background: var(--cream); }
