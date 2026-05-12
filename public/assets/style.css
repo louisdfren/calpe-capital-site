@@ -163,7 +163,7 @@ p:last-child { margin-bottom: 0; }
 
 .section--tight { padding: clamp(2.5rem, 5vw, 4rem) 0; }
 
-.section--bleed { padding-top: clamp(6rem, 12vw, 10rem); }
+.section--bleed { padding-top: clamp(3rem, 6vw, 5rem); }
 
 .section--alt { background: var(--cream-soft); }
 
@@ -464,7 +464,7 @@ p:last-child { margin-bottom: 0; }
 }
 .two-col-left { padding-right: 1rem; }
 .two-col-right p:first-of-type {
-  font-size: 1.1rem;
+  font-size: 1.0625rem;
   color: var(--ink-soft);
   line-height: 1.6;
 }
@@ -505,6 +505,13 @@ p:last-child { margin-bottom: 0; }
   letter-spacing: -0.01em;
 }
 
+.show-mobile { display: none; }
+.show-desktop { display: inline; }
+@media (max-width: 540px) {
+  .show-desktop { display: none; }
+  .show-mobile { display: inline; }
+}
+
 /* =========================================================================
    Practice list (What we do)
    ========================================================================= */
@@ -543,7 +550,7 @@ p:last-child { margin-bottom: 0; }
 }
 
 .practice-body p {
-  font-size: 1.02rem;
+  font-size: 1.0625rem;
   color: var(--ink-soft);
   max-width: 60ch;
 }
@@ -588,7 +595,7 @@ p:last-child { margin-bottom: 0; }
 }
 
 .sector-card p {
-  font-size: 0.98rem;
+  font-size: 1.0625rem;
   color: var(--ink-soft);
   margin: 0;
 }
@@ -619,7 +626,7 @@ p:last-child { margin-bottom: 0; }
 }
 
 .principle p {
-  font-size: 0.98rem;
+  font-size: 1.0625rem;
   color: var(--ink-soft);
   margin: 0;
 }
