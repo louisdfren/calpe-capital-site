@@ -1,12 +1,15 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "calpe-capital",
+  "main": "src/worker.js",
   "compatibility_date": "2026-05-12",
   "observability": {
     "enabled": true
   },
   "assets": {
-    "directory": "./public"
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": true
   },
   "compatibility_flags": [
     "nodejs_compat"

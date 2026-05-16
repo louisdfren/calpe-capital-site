@@ -13,6 +13,9 @@
 # Local preview config (not needed for deploys)
 .claude/
 
+# Node
+node_modules/
+
 # Logs
 *.log
 npm-debug.log*

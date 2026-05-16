@@ -1,32 +1,58 @@
 # Calpe Capital website — handover notes
 
-Single-page static site. No CMS, no build step, no database. One HTML file, one stylesheet, one small JS file, plus the logo set.
+Single-page static site, password-gated by a Cloudflare Worker that sits in front of the assets.
 
 ## Folder
 
 ```
 Website/
-├── index.html        The whole site (hero, about, what we do, sectors, principles, contact)
-├── README.md         this file
-└── assets/
-    ├── style.css     All styles (light cream theme, mobile responsive)
-    ├── site.js       Sticky nav, scroll-reveal, mobile menu, hero parallax
-    └── logos/        Calpe logo SVGs and PNGs
+├── public/
+│   ├── index.html        The whole site (hero, about, what we do, sectors, principles, contact)
+│   ├── index-anime-mock.html  anime.js mock fork — for reviewing motion changes
+│   └── assets/
+│       ├── style.css     All styles (light cream theme, mobile responsive)
+│       ├── style-anime.css   anime.js mock additions
+│       ├── site.js       Sticky nav, scroll-reveal, mobile menu, hero parallax
+│       ├── site-anime.js anime.js mock orchestration
+│       └── logos/        Calpe logo SVGs and PNGs
+├── src/
+│   └── worker.js         Password gate + login page (Cloudflare Worker)
+├── wrangler.jsonc        Cloudflare deploy config
+├── package.json          dev / deploy scripts
+├── .dev.vars             local password (gitignored, do not commit)
+├── .dev.vars.example     template — copy to .dev.vars
+└── README.md             this file
 ```
+
+## Password gate — how it works
+
+Every request hits the worker first. If the cookie `cc_auth` matches the expected HMAC of the password, the static asset is served. Otherwise the request is redirected to `/login`, which shows a themed login page. Submitting the correct password sets a signed cookie (HttpOnly, Secure, SameSite=Lax, 30-day life). `/logout` clears it.
+
+The password is read from `env.SITE_PASSWORD`. It is **not** in the source code, **not** in `wrangler.jsonc`. Local dev reads `.dev.vars`. Production reads a Cloudflare secret.
+
+This is a soft gate, not enterprise auth. Anyone with the password gets in. No accounts, no audit log, no rate limit. Fit for a holding page; not fit for a deal room.
 
 ## Preview locally
 
-Two ways:
+You want the full thing — worker + gate + site — so use wrangler dev (not python http.server, which serves files raw without the password gate).
 
-1. Double-click `index.html` to open in your browser.
-2. Run a small local server (cleaner — no `file://` quirks). In Terminal:
+```bash
+cd "~/Desktop/Claude Projects/Calpe Capital/Website"
 
-   ```bash
-   cd "~/Desktop/Claude Projects/Calpe Capital/Website"
-   python3 -m http.server 8000
-   ```
+# First time only — install wrangler
+npm install
 
-   Then visit `http://localhost:8000`.
+# Set a local password
+cp .dev.vars.example .dev.vars
+# Edit .dev.vars and change SITE_PASSWORD to whatever you like
+
+# Run the dev server
+npm run dev
+```
+
+Then visit `http://127.0.0.1:8787`. You'll see the login screen. Enter the password from `.dev.vars` — you're in.
+
+To reset your local session: `http://127.0.0.1:8787/logout`.
 
 ## Editing copy
 
@@ -42,14 +68,24 @@ Type is loaded from Google Fonts (Cormorant Garamond + Inter). To swap the pairi
 
 ## Deploying calpecapital.co.uk
 
-You own the domain. Below are the steps for the recommended host (Cloudflare Pages — free, fast, SSL out of the box).
+The site now deploys as a Cloudflare **Worker** (not a Pages drag-and-drop) because the password gate runs inside the worker. The flow is:
 
-### 1. Sign up to Cloudflare Pages
+```bash
+cd "~/Desktop/Claude Projects/Calpe Capital/Website"
 
-1. Go to [pages.cloudflare.com](https://pages.cloudflare.com) and sign up with your Calpe email.
-2. In the dashboard click **Create a project** → **Upload assets** (or **Direct Upload**, depending on the current UI).
-3. Drag the entire `Website` folder into the upload area. Cloudflare will spin up a temporary `*.pages.dev` URL.
-4. Visit the temporary URL on phone and desktop and check everything works.
+# First time only
+npx wrangler login
+
+# Set the production password (you'll be prompted to type it)
+npm run secret:set
+
+# Deploy
+npm run deploy
+```
+
+The first deploy gives you a `calpe-capital.<account>.workers.dev` URL. Visit it to confirm the gate works, then attach the custom domain below.
+
+To change the password later: `npm run secret:set` again, then `npm run deploy`.
 
 ### 2. Point calpecapital.co.uk at it (Namecheap DNS steps)
 
@@ -79,20 +115,24 @@ Cloudflare issues the SSL certificate automatically once it can see the DNS reco
 
 If Namecheap rejects the CNAME at the apex (`@`) — some registrars don't allow CNAME at the root — use **ALIAS** or **URL Redirect** type instead, or follow the A-record fallback Cloudflare offers in the same panel.
 
-### Alternative: Netlify
-
-Same idea, different host. Go to [app.netlify.com/drop](https://app.netlify.com/drop), drag the `Website` folder onto the page, then add your custom domain in **Site settings → Domain management**. Same DNS routine at the registrar end.
-
 ## Pushing updates later
 
-Whenever you edit `index.html` or the stylesheet:
+Edit the file(s), then:
 
-1. Save the file.
-2. Go back to your Cloudflare Pages project.
-3. Drag the `Website` folder onto the project (or use the **Create new deployment** button).
-4. Cloudflare swaps the live version over once the upload finishes.
+```bash
+npm run deploy
+```
 
-If you'd rather not drag-and-drop each time, you can link a GitHub repo to the project and pushes deploy automatically — happy to set that up if you want.
+That's it. Cloudflare swaps to the new version in seconds. No drag-and-drop. To roll back, run `npx wrangler rollback`.
+
+### Once the gate is gone
+
+When you've finished rejigging and don't want the password gate any more, two options:
+
+1. **Remove the gate, keep the worker** — empty `src/worker.js` so it always calls `env.ASSETS.fetch(request)`. Cheapest change.
+2. **Remove the worker entirely** — delete `main` from `wrangler.jsonc`, delete the `binding` line under `assets`, delete `src/`. The site becomes pure static assets again.
+
+Either way, run `npx wrangler secret delete SITE_PASSWORD` afterwards.
 
 ## Things to check before going live
 
