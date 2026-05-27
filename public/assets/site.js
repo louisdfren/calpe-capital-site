@@ -54,6 +54,45 @@
     }
   }
 
+  /* ---------- Stats counter ---------- */
+  var stats = document.querySelectorAll('.stat-figure[data-count-to]');
+  if (stats.length) {
+    function formatStat(el, value) {
+      var prefix = el.getAttribute('data-count-prefix') || '';
+      var suffix = el.getAttribute('data-count-suffix') || '';
+      var decimals = parseInt(el.getAttribute('data-count-decimals') || '0', 10);
+      el.textContent = prefix + value.toFixed(decimals) + suffix;
+    }
+    function runCount(el) {
+      var target = parseFloat(el.getAttribute('data-count-to'));
+      if (isNaN(target)) return;
+      if (reduceMotion) { formatStat(el, target); return; }
+      var duration = 1400;
+      var start = null;
+      function step(ts) {
+        if (start === null) start = ts;
+        var t = Math.min(1, (ts - start) / duration);
+        var eased = 1 - Math.pow(1 - t, 3);
+        formatStat(el, target * eased);
+        if (t < 1) window.requestAnimationFrame(step);
+      }
+      window.requestAnimationFrame(step);
+    }
+    if (!('IntersectionObserver' in window)) {
+      stats.forEach(function (el) { runCount(el); });
+    } else {
+      var statIo = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            runCount(entry.target);
+            statIo.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.4 });
+      stats.forEach(function (el) { statIo.observe(el); });
+    }
+  }
+
   /* ---------- Hero parallax (light) ---------- */
   if (!reduceMotion) {
     var glowA = document.querySelector('.hero-glow--a');
