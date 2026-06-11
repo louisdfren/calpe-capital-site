@@ -1,0 +1,6 @@
+# Calpe Capital — served once the password gate is removed.
+# While the gate is on, the worker intercepts /robots.txt and disallows all.
+User-agent: *
+Allow: /
+
+Sitemap: https://calpecapital.co.uk/sitemap.xml

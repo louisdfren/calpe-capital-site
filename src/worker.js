@@ -71,8 +71,23 @@ export default {
       });
     }
 
-    // Allow the brand favicon through unauthed so it shows on the login tab.
-    if (pathname === '/assets/logos/calpe-capital-icon.svg' || pathname === '/favicon.ico') {
+    // While the gate is on, keep crawlers away from everything. The
+    // permissive robots.txt in public/ takes over when the worker goes.
+    if (pathname === '/robots.txt') {
+      return new Response('User-agent: *\nDisallow: /\n', {
+        headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+      });
+    }
+
+    // Allow brand assets and fonts through unauthed — the login page and
+    // browser chrome (favicon, touch icon) need them before auth.
+    if (
+      pathname === '/assets/logos/calpe-capital-icon.svg' ||
+      pathname === '/favicon.ico' ||
+      pathname === '/apple-touch-icon.png' ||
+      pathname === '/assets/fonts.css' ||
+      pathname.startsWith('/assets/fonts/')
+    ) {
       return env.ASSETS.fetch(request);
     }
 
@@ -131,9 +146,7 @@ function loginHtml({ error = false } = {}) {
 <meta name="theme-color" content="#F4EEE2">
 <title>Calpe Capital — private access</title>
 <link rel="icon" href="/assets/logos/calpe-capital-icon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/fonts.css">
 <style>
   :root {
     --cream:   #F4EEE2;

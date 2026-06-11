@@ -66,7 +66,7 @@ If you change the nav links, change them in both the desktop nav (`<ul class="na
 
 All theme colours live at the top of `assets/style.css` under `:root`. Change a hex value there and the whole site updates.
 
-Type is loaded from Google Fonts (Cormorant Garamond + Inter). To swap the pairing, edit the `<link>` tag in `index.html`'s `<head>`.
+Type is self-hosted (Cormorant Garamond + Inter variable woff2, latin subset) in `assets/fonts/`, declared in `assets/fonts.css` and shared by the site and the login page. To swap the pairing, replace the woff2 files and update `fonts.css`.
 
 ## Deploying calpecapital.co.uk
 
