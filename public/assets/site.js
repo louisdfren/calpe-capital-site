@@ -36,6 +36,44 @@
     });
   }
 
+  /* ---------- Hero headline word stagger ---------- */
+  var heroTitle = document.getElementById('hero-title');
+  if (heroTitle && !reduceMotion) {
+    var wordIndex = 0;
+    function wrapWords(node) {
+      Array.prototype.slice.call(node.childNodes).forEach(function (child) {
+        if (child.nodeType === Node.TEXT_NODE) {
+          var frag = document.createDocumentFragment();
+          child.textContent.split(/(\s+)/).forEach(function (part) {
+            if (!part) return;
+            if (/^\s+$/.test(part)) {
+              frag.appendChild(document.createTextNode(part));
+            } else {
+              var w = document.createElement('span');
+              w.className = 'w';
+              w.style.setProperty('--wd', (120 + wordIndex * 90) + 'ms');
+              w.textContent = part;
+              frag.appendChild(w);
+              wordIndex++;
+            }
+          });
+          node.replaceChild(frag, child);
+        } else if (child.nodeType === Node.ELEMENT_NODE && child.tagName !== 'BR') {
+          wrapWords(child);
+        }
+      });
+    }
+    wrapWords(heroTitle);
+    // The h1's block-level reveal would double-fade the words; show the block
+    // immediately and let the words carry the entrance.
+    heroTitle.classList.remove('reveal');
+    window.requestAnimationFrame(function () {
+      window.requestAnimationFrame(function () {
+        heroTitle.classList.add('words-in');
+      });
+    });
+  }
+
   /* ---------- Scroll reveal ---------- */
   var reveals = document.querySelectorAll('.reveal');
   if (reveals.length) {
@@ -97,14 +135,14 @@
   if (!reduceMotion) {
     var glowA = document.querySelector('.hero-glow--a');
     var glowB = document.querySelector('.hero-glow--b');
-    var lines = document.querySelector('.hero-lines');
+    var heroArt = document.querySelector('.hero-art img');
     var ticking = false;
 
     function applyParallax() {
       var y = window.scrollY;
       if (glowA) glowA.style.transform = 'translate3d(0,' + (y * 0.15) + 'px,0)';
       if (glowB) glowB.style.transform = 'translate3d(0,' + (y * -0.10) + 'px,0)';
-      if (lines) lines.style.transform = 'translate3d(0,' + (y * 0.05) + 'px,0)';
+      if (heroArt) heroArt.style.transform = 'translate3d(0,' + (y * 0.08) + 'px,0) scale(1.06)';
       ticking = false;
     }
 

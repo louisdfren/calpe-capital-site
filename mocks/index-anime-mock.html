@@ -5,52 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Calpe Capital is a London-based private investment and advisory company, working across property and corporate situations in the UK.">
   <meta name="theme-color" content="#F4EEE2">
-  <title>Calpe Capital — private investment and advisory</title>
-  <link rel="canonical" href="https://calpecapital.co.uk/">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Calpe Capital">
-  <meta property="og:title" content="Calpe Capital — private investment and advisory">
-  <meta property="og:description" content="Private capital, applied with patience. A London-based investment and advisory company working across property and corporate situations in the UK.">
-  <meta property="og:url" content="https://calpecapital.co.uk/">
-  <meta property="og:image" content="https://calpecapital.co.uk/assets/img/og-calpe.jpg">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Calpe Capital — private investment and advisory">
-  <meta name="twitter:description" content="Private capital, applied with patience. A London-based investment and advisory company working across property and corporate situations in the UK.">
-  <meta name="twitter:image" content="https://calpecapital.co.uk/assets/img/og-calpe.jpg">
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FinancialService",
-    "name": "Calpe Capital Limited",
-    "url": "https://calpecapital.co.uk/",
-    "logo": "https://calpecapital.co.uk/assets/logos/calpe-capital-icon.png",
-    "description": "London-based private investment and advisory company, working across property and corporate situations in the UK.",
-    "email": "louis@calpecapital.co.uk",
-    "telephone": "+447591783927",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "10 Gloucester Place, Portman Square",
-      "addressLocality": "London",
-      "postalCode": "W1U 8EZ",
-      "addressCountry": "GB"
-    },
-    "founder": [
-      { "@type": "Person", "name": "Paul Scheunemann" },
-      { "@type": "Person", "name": "Louis Frendo" }
-    ],
-    "areaServed": "GB"
-  }
-  </script>
+  <title>Calpe Capital — anime.js mock</title>
   <link rel="icon" href="assets/logos/calpe-capital-icon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="preload" as="image" href="assets/img/hero-calpe.jpg" fetchpriority="high">
   <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/style-anime.css">
+  <style>
+    /* Small banner so it is obvious this is the mock, not the live page. */
+    .mock-banner {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      padding: 6px 14px;
+      background: #1C1916;
+      color: #F4EEE2;
+      font-family: Inter, sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+    body { padding-top: 28px; }
+    .site-header { top: 28px; }
+  </style>
 </head>
 <body>
+
+  <div class="mock-banner">anime.js mock — for review</div>
 
   <div class="grain" aria-hidden="true"></div>
 
@@ -86,7 +69,6 @@
       <nav aria-label="Primary">
         <ul class="nav-links">
           <li><a href="#about">About</a></li>
-          <li><a href="#partners">Partners</a></li>
           <li><a href="#practice">What we do</a></li>
           <li><a href="#sectors">Sectors</a></li>
           <li><a href="#contact">Contact</a></li>
@@ -100,7 +82,6 @@
     </div>
     <div class="mobile-nav" id="mobileNav" hidden>
       <a href="#about">About</a>
-      <a href="#partners">Partners</a>
       <a href="#practice">What we do</a>
       <a href="#sectors">Sectors</a>
       <a href="#contact">Contact</a>
@@ -109,18 +90,21 @@
 
   <main id="top">
 
-    <!-- HERO -->
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-bg" aria-hidden="true">
-        <figure class="hero-art">
-          <img src="assets/img/hero-calpe.jpg" alt="" fetchpriority="high" decoding="async">
-        </figure>
         <div class="hero-glow hero-glow--a"></div>
         <div class="hero-glow hero-glow--b"></div>
+        <svg class="hero-lines" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <g stroke="currentColor" stroke-width="0.6" fill="none" opacity="0.18">
+            <path d="M-100 760 Q 400 640, 900 720 T 1600 660" />
+            <path d="M-100 800 Q 400 700, 900 760 T 1600 720" />
+            <path d="M-100 840 Q 400 760, 900 800 T 1600 780" />
+          </g>
+        </svg>
       </div>
       <div class="container hero-inner">
-        <span class="eyebrow reveal">Private investment &amp; advisory</span>
-        <h1 id="hero-title" class="display reveal" style="--delay:80ms">
+        <span class="eyebrow">Private investment &amp; advisory</span>
+        <h1 id="hero-title" class="display">
           Private capital,<br><span class="italic">applied with patience</span>.
         </h1>
         <p class="lead reveal" style="--delay:160ms">A London-based investment and advisory company, working across property and corporate situations in the UK.</p>
@@ -129,51 +113,26 @@
           <a href="#contact" class="btn btn--ghost">Speak to us</a>
         </div>
       </div>
-      <p class="hero-caption"><span class="italic">Mons Calpe</span> · the northern Pillar of Hercules</p>
       <a class="hero-scroll" href="#about" aria-label="Scroll to next section">
         <span class="hero-scroll-line"></span>
       </a>
     </section>
 
-    <!-- TRACK RECORD STATS BAND -->
-    <section class="stats-band" aria-label="Track record">
-      <div class="container">
-        <ol class="stats-grid">
-          <li class="stat reveal">
-            <span class="stat-figure" data-count-to="274" data-count-prefix="£" data-count-suffix="M">£0M</span>
-            <span class="stat-label">Real estate sales</span>
-          </li>
-          <li class="stat reveal" style="--delay:120ms">
-            <span class="stat-figure" data-count-to="16.9" data-count-decimals="1" data-count-prefix="£" data-count-suffix="M">£0M</span>
-            <span class="stat-label">Capital raised</span>
-          </li>
-          <li class="stat reveal" style="--delay:240ms">
-            <span class="stat-figure" data-count-to="6.1" data-count-decimals="1" data-count-prefix="£" data-count-suffix="M">£0M</span>
-            <span class="stat-label">Acquired</span>
-          </li>
-        </ol>
-      </div>
-    </section>
-
-    <!-- ABOUT -->
     <section class="section section--bleed" id="about" aria-labelledby="about-title">
       <div class="container">
         <div class="two-col">
           <div class="two-col-left reveal">
             <span class="eyebrow">About</span>
-            <h2 id="about-title" class="display-sm">We place capital. We commit it. And we know our sectors well enough to be useful on a deal.</h2>
+            <h2 id="about-title" class="display-sm">Built around the people we back, and the people who back us.</h2>
           </div>
           <div class="two-col-right reveal" style="--delay:120ms">
-            <p>Calpe Capital is the joint vehicle of two operators. One side of the work is arranging debt and equity for property and corporate borrowers from a network of lenders and family offices. The other side is taking principal positions and giving sector advice in the markets we live in day to day.</p>
-            <p>The track record above is what the two of us have done personally. The pipeline below is what we are working on now.</p>
-            <p>The name is the old one for the Rock of Gibraltar — <em>Mons Calpe</em>, the northern Pillar of Hercules. The two pillars in our mark.</p>
-            <p class="muted">Founded 2026. London-based. Founder-led, founder-funded.</p>
+            <p>Calpe Capital is a private investment house. We work directly with operators, developers and capital partners. The mandate is narrow on purpose. A small number of relationships. A preference for situations we understand end to end.</p>
+            <p class="muted">Founded in 2026. Based in central London. Founder-led.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- METRICS -->
     <section class="section section--tight" aria-label="At a glance">
       <div class="container">
         <div class="metrics reveal">
@@ -197,82 +156,6 @@
       </div>
     </section>
 
-    <!-- FOUNDING PARTNERS -->
-    <section class="section section--partners" id="partners" aria-labelledby="partners-title">
-      <div class="container">
-        <header class="section-header reveal">
-          <span class="eyebrow">Founding Partners</span>
-          <h2 id="partners-title" class="display-sm">The people on the file.</h2>
-          <p class="section-lede">Two principals. Different backgrounds, complementary networks. The person you meet is the person who runs the deal.</p>
-        </header>
-
-        <ol class="partners">
-          <li class="partner reveal">
-            <figure class="partner-photo">
-              <img src="assets/team/paul-scheunemann.jpg" alt="Paul Scheunemann" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('partner-photo--empty');">
-              <span class="partner-photo-fallback" aria-hidden="true">PS</span>
-            </figure>
-            <div class="partner-body">
-              <span class="partner-num" aria-hidden="true">I</span>
-              <h3 class="partner-name">Paul Scheunemann</h3>
-              <p class="partner-role">Founding Partner</p>
-              <div class="partner-bio">
-                <p>Originally from Hamburg and based in London for the past six years, Paul is Head of Origination at a London private equity fund with over £1B in assets under management. He began his career in management consulting before moving into residential development and sales, where he has been responsible for £270m of transactions across some of London's most prestigious addresses, working with UHNW buyers and global investor networks.</p>
-                <p>Alongside his work in private equity, Paul is the founder of a technology venture currently valued at £26m. He brings analytical rigour, an entrepreneur's instinct, and a deep dealmaking network to every relationship he builds.</p>
-              </div>
-            </div>
-          </li>
-
-          <li class="partner reveal" style="--delay:120ms">
-            <figure class="partner-photo">
-              <img src="assets/team/louis-frendo.jpg" alt="Louis Frendo" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('partner-photo--empty');">
-              <span class="partner-photo-fallback" aria-hidden="true">LF</span>
-            </figure>
-            <div class="partner-body">
-              <span class="partner-num" aria-hidden="true">II</span>
-              <h3 class="partner-name">Louis Frendo</h3>
-              <p class="partner-role">Founding Partner</p>
-              <div class="partner-bio">
-                <p>Originally from Gibraltar, with childhoods in Singapore, Montreal and the Bahamas. London-based for the past two years, Louis is Acquisition Manager at a UK property developer focused on roadside and mixed-use schemes. He began his career in property finance, structuring debt and equity for developer clients before moving in-house to lead origination across drive-thru, hotel and supermarket-anchored sites.</p>
-                <p>Alongside the development work, Louis brokers commodity mandates directly with producers and refineries worldwide, and is co-founder of a Jersey-based capital introduction firm advising borrowers on funding situations. He brings the instincts of an operator and the network of a broker to every situation Calpe takes on.</p>
-              </div>
-            </div>
-          </li>
-        </ol>
-
-        <div class="partners-footer">
-          <div class="partners-footer-block reveal">
-            <span class="eyebrow">Selected projects</span>
-            <ul class="projects-grid">
-              <li>60 Curzon</li>
-              <li>Agentwise</li>
-              <li>Stealth agritech</li>
-              <li>DAX &amp; Fortune 500 advisory</li>
-              <li>Preston</li>
-              <li>Norwich</li>
-              <li>Wisbech</li>
-              <li>Folkestone</li>
-              <li>Skelmersdale</li>
-              <li>Union House</li>
-            </ul>
-          </div>
-
-          <div class="partners-footer-block reveal" style="--delay:80ms">
-            <span class="eyebrow">Areas of expertise</span>
-            <ul class="expertise-list">
-              <li>Commodities</li>
-              <li>Property finance</li>
-              <li>Property development</li>
-              <li>Acquisition</li>
-              <li>Sales</li>
-              <li>Lettings</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- WHAT WE DO -->
     <section class="section section--practice" id="practice" aria-labelledby="practice-title">
       <div class="container">
         <header class="section-header reveal">
@@ -282,21 +165,21 @@
         </header>
 
         <ol class="practice-list">
-          <li class="practice-item reveal">
+          <li class="practice-item">
             <span class="practice-num" aria-hidden="true">I</span>
             <div class="practice-body">
               <h3>Capital placement</h3>
               <p>Sourcing and arranging debt, equity and mezzanine for property developers, operators and corporate borrowers. Lender and family-office relationships across the UK and Switzerland. Facility sizes typically £1m to £25m. Engagement on a success-fee basis, no retainer.</p>
             </div>
           </li>
-          <li class="practice-item reveal">
+          <li class="practice-item">
             <span class="practice-num" aria-hidden="true">II</span>
             <div class="practice-body">
               <h3>Principal investment</h3>
               <p>A working pipeline of UK property opportunities across roadside, hospitality and mixed-use. We commit time alongside operating partners from origination through planning, and capital on situations we have followed end to end.</p>
             </div>
           </li>
-          <li class="practice-item reveal">
+          <li class="practice-item">
             <span class="practice-num" aria-hidden="true">III</span>
             <div class="practice-body">
               <h3>Sector advisory</h3>
@@ -307,7 +190,6 @@
       </div>
     </section>
 
-    <!-- SECTORS -->
     <section class="section section--alt" id="sectors" aria-labelledby="sectors-title">
       <div class="container">
         <header class="section-header reveal">
@@ -316,40 +198,24 @@
         </header>
         <div class="sector-grid">
           <article class="sector-card reveal">
-            <figure class="sector-media" aria-hidden="true">
-              <img src="assets/img/sector-roadside.jpg" alt="" loading="lazy" decoding="async">
-            </figure>
-            <div class="sector-body">
-              <span class="sector-tag">01</span>
-              <h3>Roadside &amp; drive-thru</h3>
-              <p>Single-tenant and multi-let drive-thru schemes. Acquisition, planning, tenant placement and exit. Operators we work with include national F&amp;B brands, EV charging networks and forecourt groups.</p>
-            </div>
+            <span class="sector-tag">01</span>
+            <h3>Roadside &amp; drive-thru</h3>
+            <p>Single-tenant and multi-let drive-thru schemes. Acquisition, planning, tenant placement and exit. Operators we work with include national F&amp;B brands, EV charging networks and forecourt groups.</p>
           </article>
           <article class="sector-card reveal" style="--delay:80ms">
-            <figure class="sector-media" aria-hidden="true">
-              <img src="assets/img/sector-hospitality.jpg" alt="" loading="lazy" decoding="async">
-            </figure>
-            <div class="sector-body">
-              <span class="sector-tag">02</span>
-              <h3>Hospitality &amp; hotels</h3>
-              <p>Limited-service and franchise hotels, alongside food and beverage operators within roadside and town-centre schemes. Capital arrangement and acquisition advice.</p>
-            </div>
+            <span class="sector-tag">02</span>
+            <h3>Hospitality &amp; hotels</h3>
+            <p>Limited-service and franchise hotels, alongside food and beverage operators within roadside and town-centre schemes. Capital arrangement and acquisition advice.</p>
           </article>
           <article class="sector-card reveal" style="--delay:160ms">
-            <figure class="sector-media" aria-hidden="true">
-              <img src="assets/img/sector-mixeduse.jpg" alt="" loading="lazy" decoding="async">
-            </figure>
-            <div class="sector-body">
-              <span class="sector-tag">03</span>
-              <h3>Mixed-use &amp; retail</h3>
-              <p>Mixed-use schemes, supermarket-anchored sites and convenience retail. Pre-let and pre-funded structures preferred.</p>
-            </div>
+            <span class="sector-tag">03</span>
+            <h3>Mixed-use &amp; retail</h3>
+            <p>Mixed-use schemes, supermarket-anchored sites and convenience retail. Pre-let and pre-funded structures preferred.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- PRINCIPLES -->
     <section class="section" id="principles" aria-labelledby="principles-title">
       <div class="container">
         <header class="section-header reveal">
@@ -376,7 +242,6 @@
       </div>
     </section>
 
-    <!-- CONTACT -->
     <section class="section section--contact" id="contact" aria-labelledby="contact-title">
       <div class="container">
         <header class="section-header section-header--center reveal">
@@ -428,5 +293,11 @@
   </footer>
 
   <script src="assets/site.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/animejs@4.0.2/lib/anime.iife.min.js"></script>
+  <script>
+    // The UMD/IIFE build exposes the library as `anime`. Confirm shape.
+    window.anime = window.anime || (typeof anime !== 'undefined' ? anime : null);
+  </script>
+  <script src="assets/site-anime.js"></script>
 </body>
 </html>

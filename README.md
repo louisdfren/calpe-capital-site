@@ -7,14 +7,16 @@ Single-page static site, password-gated by a Cloudflare Worker that sits in fron
 ```
 Website/
 ├── public/
-│   ├── index.html        The whole site (hero, about, what we do, sectors, principles, contact)
-│   ├── index-anime-mock.html  anime.js mock fork — for reviewing motion changes
+│   ├── index.html        The whole site (hero, stats, about, partners, what we do, sectors, principles, contact)
 │   └── assets/
 │       ├── style.css     All styles (light cream theme, mobile responsive)
-│       ├── style-anime.css   anime.js mock additions
-│       ├── site.js       Sticky nav, scroll-reveal, mobile menu, hero parallax
-│       ├── site-anime.js anime.js mock orchestration
+│       ├── site.js       Sticky nav, scroll-reveal, hero word-stagger, mobile menu, parallax
+│       ├── img/          Generated brand imagery (Higgsfield AI, June 2026)
+│       │   ├── hero-calpe.jpg        Hero — Mons Calpe rising from sea mist
+│       │   ├── og-calpe.jpg          1200×630 link-share image (og:image)
+│       │   └── sector-*.jpg          Sector card plates (roadside / hospitality / mixed-use)
 │       └── logos/        Calpe logo SVGs and PNGs
+├── mocks/                Old anime.js motion experiment (not deployed, predates Partners section)
 ├── src/
 │   └── worker.js         Password gate + login page (Cloudflare Worker)
 ├── wrangler.jsonc        Cloudflare deploy config
@@ -122,6 +124,16 @@ Edit the file(s), then:
 ```bash
 npm run deploy
 ```
+
+### GitHub Actions auto-deploy (currently broken)
+
+`.github/workflows/deploy.yml` deploys on every push to main, but the
+`CLOUDFLARE_API_TOKEN` repo secret holds a **global API key**, which wrangler
+rejects (`Authentication error [code: 10000]`). To fix: in the Cloudflare
+dashboard go to My Profile → API Tokens → Create Token → "Edit Cloudflare
+Workers" template, then replace the `CLOUDFLARE_API_TOKEN` secret on the
+GitHub repo with that token. The `CLOUDFLARE_EMAIL` secret can be deleted.
+Until then, deploy locally with `npm run deploy`.
 
 That's it. Cloudflare swaps to the new version in seconds. No drag-and-drop. To roll back, run `npx wrangler rollback`.
 

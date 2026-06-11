@@ -1,0 +1,81 @@
+/* =========================================================================
+   Calpe Capital — anime.js mock additions
+   Layered on top of style.css. Only the changes needed for the new motion.
+   ========================================================================= */
+
+/* 1 — Hero headline: split words start invisible, anime.js fades them in.
+   We split into spans in JS; CSS gives the initial state. */
+.display .word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(40%);
+  will-change: opacity, transform;
+}
+
+/* Keep the "applied with patience" line a single visual unit by wrapping
+   it in .display-line so the line break still works. */
+.display-line { display: inline-block; }
+
+/* 2 — Logo line-draw on load.
+   Stroke the column rects and accents on first paint; anime.js animates
+   stroke-dashoffset from full length to 0. We start invisible so the
+   reveal feels deliberate. */
+.nav-icon svg .col,
+.nav-icon svg .accent,
+.nav-icon svg .accent-fill {
+  /* Only the header logo, not the footer */
+}
+.site-header .nav-icon svg .col {
+  fill: transparent;
+  stroke: currentColor;
+  stroke-width: 1.2;
+}
+.site-header .nav-icon svg .accent {
+  stroke: var(--accent-deep);
+}
+.site-header .nav-icon svg .accent-fill {
+  opacity: 0;
+}
+.site-header.logo-drawn .nav-icon svg .col { fill: currentColor; }
+.site-header.logo-drawn .nav-icon svg .accent-fill { opacity: 1; }
+
+/* 3 — Scroll-linked hero curves. The three paths start undrawn; anime.js
+   ties stroke-dashoffset to scroll progress. */
+.hero-lines path {
+  stroke-dasharray: var(--len, 2400);
+  stroke-dashoffset: var(--len, 2400);
+}
+
+/* 5 — Practice list stagger: items start lower, with the Roman numeral
+   offset further so it slides in from the left. anime.js handles the
+   reveal; CSS sets initial state. */
+.practice-item.anime-init {
+  opacity: 0;
+  transform: translateY(32px);
+}
+.practice-item.anime-init .practice-num {
+  transform: translateX(-18px);
+  opacity: 0;
+}
+
+/* 7 — Eyebrow underline grow. The ::before pseudo on .eyebrow is
+   already a thin rule; we replace its static width with an animated
+   scaleX from 0. */
+.eyebrow.anime-rule::before {
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: none; /* anime.js drives this */
+}
+
+/* Make sure reveal still works for elements that haven't been wired
+   into anime.js individually — keep the original .reveal behaviour. */
+
+@media (prefers-reduced-motion: reduce) {
+  .display .word { opacity: 1; transform: none; }
+  .site-header .nav-icon svg .col { fill: currentColor; stroke: none; }
+  .site-header .nav-icon svg .accent-fill { opacity: 1; }
+  .hero-lines path { stroke-dashoffset: 0; }
+  .practice-item.anime-init { opacity: 1; transform: none; }
+  .practice-item.anime-init .practice-num { transform: none; opacity: 1; }
+  .eyebrow.anime-rule::before { transform: scaleX(1); }
+}
