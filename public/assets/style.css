@@ -13,7 +13,6 @@
   --ink-mute:     #8A7F72;
   --accent:       #C58A2E;
   --accent-deep:  #A06F1F;
-  --brand-navy:   #234058;
   --hairline:     rgba(28, 25, 22, 0.12);
   --hairline-soft:rgba(28, 25, 22, 0.06);
   --paper-shadow: 0 1px 0 rgba(28, 25, 22, 0.04), 0 20px 50px -30px rgba(28, 25, 22, 0.18);
@@ -271,7 +270,7 @@ p:last-child { margin-bottom: 0; }
 }
 
 .nav-icon svg { width: 100%; height: 100%; }
-.nav-icon .col { fill: var(--brand-navy); }
+.nav-icon .col { fill: var(--ink); }
 .nav-icon .accent { stroke: var(--accent); }
 .nav-icon .accent-fill { fill: var(--accent); }
 
@@ -838,7 +837,7 @@ a.contact-value:hover { color: var(--accent-deep); }
 
 .stats-band {
   position: relative;
-  background: var(--brand-navy);
+  background: var(--ink);
   color: var(--cream);
   padding: clamp(2.5rem, 5vw, 4rem) 0;
   overflow: hidden;

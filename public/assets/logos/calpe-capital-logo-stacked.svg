@@ -1,28 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
 
 
-<rect x="192" y="214" width="56" height="14" fill="#234058"/>
-<rect x="197" y="202" width="46" height="12" fill="#234058"/>
-<rect x="204" y="82" width="32" height="120" fill="#234058"/>
+<rect x="192" y="214" width="56" height="14" fill="#1C1916"/>
+<rect x="197" y="202" width="46" height="12" fill="#1C1916"/>
+<rect x="204" y="82" width="32" height="120" fill="#1C1916"/>
 <line x1="212" y1="86" x2="212" y2="198" stroke="#C58A2E" stroke-width="0.7"/>
 <line x1="220" y1="86" x2="220" y2="198" stroke="#C58A2E" stroke-width="0.7"/>
 <line x1="228" y1="86" x2="228" y2="198" stroke="#C58A2E" stroke-width="0.7"/>
-<rect x="202" y="76" width="36" height="6" fill="#234058"/>
-<rect x="197" y="69" width="46" height="7" fill="#234058"/>
-<rect x="192" y="60" width="56" height="9" fill="#234058"/>
+<rect x="202" y="76" width="36" height="6" fill="#1C1916"/>
+<rect x="197" y="69" width="46" height="7" fill="#1C1916"/>
+<rect x="192" y="60" width="56" height="9" fill="#1C1916"/>
 
-<rect x="252" y="214" width="56" height="14" fill="#234058"/>
-<rect x="257" y="202" width="46" height="12" fill="#234058"/>
-<rect x="264" y="82" width="32" height="120" fill="#234058"/>
+<rect x="252" y="214" width="56" height="14" fill="#1C1916"/>
+<rect x="257" y="202" width="46" height="12" fill="#1C1916"/>
+<rect x="264" y="82" width="32" height="120" fill="#1C1916"/>
 <line x1="272" y1="86" x2="272" y2="198" stroke="#C58A2E" stroke-width="0.7"/>
 <line x1="280" y1="86" x2="280" y2="198" stroke="#C58A2E" stroke-width="0.7"/>
 <line x1="288" y1="86" x2="288" y2="198" stroke="#C58A2E" stroke-width="0.7"/>
-<rect x="262" y="76" width="36" height="6" fill="#234058"/>
-<rect x="257" y="69" width="46" height="7" fill="#234058"/>
-<rect x="252" y="60" width="56" height="9" fill="#234058"/>
+<rect x="262" y="76" width="36" height="6" fill="#1C1916"/>
+<rect x="257" y="69" width="46" height="7" fill="#1C1916"/>
+<rect x="252" y="60" width="56" height="9" fill="#1C1916"/>
 <line x1="248" y1="160" x2="252" y2="160" stroke="#C58A2E" stroke-width="2.5"/>
 <circle cx="250.0" cy="160" r="4.5" fill="#C58A2E"/>
 <line x1="120" y1="290" x2="380" y2="290" stroke="#C58A2E" stroke-width="1"/>
 <text x="250" y="360" text-anchor="middle" font-family="Optima, &quot;Optima Nova LT&quot;, &quot;URW Classico&quot;, Candara, &quot;Linux Biolinum&quot;, &quot;Iowan Old Style&quot;, Georgia, serif" font-size="64" font-weight="500" fill="#0E0F11" letter-spacing="2">Calpe</text>
-<text x="250" y="412" text-anchor="middle" font-family="Optima, &quot;Optima Nova LT&quot;, &quot;URW Classico&quot;, Candara, &quot;Linux Biolinum&quot;, &quot;Iowan Old Style&quot;, Georgia, serif" font-size="22" font-weight="400" fill="#234058" letter-spacing="10">Capital</text>
+<text x="250" y="412" text-anchor="middle" font-family="Optima, &quot;Optima Nova LT&quot;, &quot;URW Classico&quot;, Candara, &quot;Linux Biolinum&quot;, &quot;Iowan Old Style&quot;, Georgia, serif" font-size="22" font-weight="400" fill="#1C1916" letter-spacing="10">Capital</text>
 </svg>
