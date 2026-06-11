@@ -15,17 +15,21 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - run: npm ci
 
+      # Run the repo's own wrangler (v4, installed by npm ci) instead of
+      # cloudflare/wrangler-action: the action bundles wrangler 3.x, which
+      # can't read wrangler.jsonc and dies with "Missing entry-point".
+      # This is the exact command that works locally (npm run deploy).
       - name: Deploy with Wrangler
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          command: deploy
+        run: npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: d4df51783b85b94b0a9815cc51069ceb
