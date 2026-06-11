@@ -735,6 +735,63 @@ p:last-child { margin-bottom: 0; }
 }
 
 /* =========================================================================
+   Selected work
+   ========================================================================= */
+
+.section--work { background: var(--cream); }
+
+.work-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--hairline);
+  border: 1px solid var(--hairline);
+}
+
+.work-item {
+  background: var(--cream);
+  padding: clamp(1.75rem, 3vw, 2.75rem);
+  transition: background 0.4s var(--ease);
+}
+
+.work-item:hover { background: var(--cream-soft); }
+
+.work-tag {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-deep);
+  margin-bottom: 1.25rem;
+}
+
+.work-item h3 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 2.2vw, 1.9rem);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.75rem;
+}
+
+.work-item p {
+  font-size: 1.0625rem;
+  color: var(--ink-soft);
+  margin: 0;
+  max-width: 52ch;
+}
+
+.work-note {
+  margin: 1.75rem 0 0;
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+}
+
+/* =========================================================================
    Principles
    ========================================================================= */
 
@@ -1129,6 +1186,7 @@ a.contact-value:hover { color: var(--accent-deep); }
   .metric-value { font-size: 1.3rem; }
 
   .sector-grid { grid-template-columns: 1fr; }
+  .work-list { grid-template-columns: 1fr; }
   .principles { grid-template-columns: 1fr; gap: 1.75rem; }
 
   .practice-item { grid-template-columns: 1fr; gap: 0.75rem; }
