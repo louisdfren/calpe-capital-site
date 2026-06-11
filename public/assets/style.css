@@ -408,7 +408,7 @@ p:last-child { margin-bottom: 0; }
   height: 60vw;
   bottom: -25vw;
   left: -15vw;
-  background: radial-gradient(circle at 50% 50%, rgba(35, 64, 88, 0.18), rgba(35, 64, 88, 0) 60%);
+  background: radial-gradient(circle at 50% 50%, rgba(28, 25, 22, 0.14), rgba(28, 25, 22, 0) 60%);
 }
 
 /* Hero image plate — Mons Calpe, anchored right, dissolving into the cream
@@ -419,6 +419,10 @@ p:last-child { margin-bottom: 0; }
   width: min(58vw, 980px);
   margin: 0;
   overflow: hidden;
+  /* Feather the figure's own left edge — without this, the compositing
+     boundary antialiases against the flat cream as a faint vertical line. */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 12%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 12%);
 }
 
 .hero-art img {
@@ -442,6 +446,53 @@ p:last-child { margin-bottom: 0; }
     linear-gradient(to top, var(--cream) 0%, rgba(244, 238, 226, 0) 28%),
     linear-gradient(to bottom, rgba(244, 238, 226, 0.85) 0%, rgba(244, 238, 226, 0) 16%);
 }
+
+/* Drifting sea mist — two seamless noise tiles (1024px period) sliding in
+   opposite directions over the waterline. Transform-only, so it composites
+   on the GPU; the reduced-motion override freezes it into still haze. */
+.hero-mist {
+  position: absolute;
+  left: 0; right: 0; bottom: -2%;
+  height: 42%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-mist-layer {
+  position: absolute;
+  top: 0; bottom: 0;
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  background-size: 1024px 100%;
+  will-change: transform;
+}
+
+.hero-mist-layer--far {
+  left: 0;
+  width: calc(100% + 1024px);
+  background-image: url('img/mist-b.png');
+  opacity: 0.5;
+  animation: mistDriftLeft 110s linear infinite;
+}
+
+.hero-mist-layer--near {
+  left: -1024px;
+  width: calc(100% + 1024px);
+  background-image: url('img/mist-a.png');
+  opacity: 0.62;
+  animation: mistDriftRight 70s linear infinite;
+}
+
+@keyframes mistDriftLeft  { to { transform: translate3d(-1024px, 0, 0); } }
+@keyframes mistDriftRight { to { transform: translate3d(1024px, 0, 0); } }
+
+/* The bronze dawn glow breathes very slowly. */
+@keyframes glowBreathe {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 0.72; }
+}
+
+.hero-glow--a { animation: glowBreathe 11s ease-in-out infinite; }
 
 .hero-caption {
   position: absolute;
