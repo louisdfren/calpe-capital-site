@@ -8,6 +8,6 @@
     "secret:set": "wrangler secret put SITE_PASSWORD"
   },
   "devDependencies": {
-    "wrangler": "^3.114.17"
+    "wrangler": "^4.99.0"
   }
 }
