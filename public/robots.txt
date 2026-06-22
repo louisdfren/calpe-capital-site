@@ -1,5 +1,4 @@
-# Calpe Capital — served once the password gate is removed.
-# While the gate is on, the worker intercepts /robots.txt and disallows all.
+# Calpe Capital — public site, indexing allowed.
 User-agent: *
 Allow: /
 
