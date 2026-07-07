@@ -1,5 +1,0 @@
-# Local development secrets — copy to .dev.vars and edit.
-# .dev.vars is gitignored. Wrangler dev reads it automatically.
-# For production, use:  wrangler secret put SITE_PASSWORD
-
-SITE_PASSWORD=change-me-locally

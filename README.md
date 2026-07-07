@@ -1,161 +1,96 @@
 # Calpe Capital website — handover notes
 
-Single-page static site, password-gated by a Cloudflare Worker that sits in front of the assets.
+Single-page static site, hosted on **Cloudflare Pages**. No build step, no
+backend, no password gate — the `public/` folder is served as-is.
 
 ## Folder
 
 ```
-Website/
-├── public/
-│   ├── index.html        The whole site (hero, stats, about, partners, what we do, sectors, principles, contact)
+calpe-capital-website/
+├── public/                 Everything that goes live (this dir is deployed)
+│   ├── index.html          The whole site (hero, stats, about, partners, what we do, sectors, principles, contact)
+│   ├── robots.txt          Permissive — allows indexing
+│   ├── sitemap.xml         Single-page sitemap
+│   ├── apple-touch-icon.png
 │   └── assets/
-│       ├── style.css     All styles (light cream theme, mobile responsive)
-│       ├── site.js       Sticky nav, scroll-reveal, hero word-stagger, mobile menu, parallax
-│       ├── img/          Generated brand imagery (Higgsfield AI, June 2026)
+│       ├── style.css       All styles (light cream theme, mobile responsive)
+│       ├── site.js         Sticky nav, scroll-reveal, hero word-stagger, mobile menu, parallax
+│       ├── fonts.css       Self-hosted variable fonts (Cormorant Garamond + Inter)
+│       ├── fonts/          The woff2 files
+│       ├── img/            Generated brand imagery (Higgsfield AI, June 2026)
 │       │   ├── hero-calpe.jpg        Hero — Mons Calpe rising from sea mist
 │       │   ├── og-calpe.jpg          1200×630 link-share image (og:image)
 │       │   └── sector-*.jpg          Sector card plates (roadside / hospitality / mixed-use)
-│       └── logos/        Calpe logo SVGs and PNGs
-├── mocks/                Old anime.js motion experiment (not deployed, predates Partners section)
-├── src/
-│   └── worker.js         Password gate + login page (Cloudflare Worker)
-├── wrangler.jsonc        Cloudflare deploy config
-├── package.json          dev / deploy scripts
-├── .dev.vars             local password (gitignored, do not commit)
-├── .dev.vars.example     template — copy to .dev.vars
-└── README.md             this file
+│       └── logos/          Calpe logo SVGs and PNGs
+├── mocks/                  Old anime.js motion experiment (not deployed)
+├── .github/workflows/
+│   └── deploy.yml          Auto-deploy to Cloudflare Pages on push to main
+└── README.md              this file
 ```
-
-## Password gate — how it works
-
-Every request hits the worker first. If the cookie `cc_auth` matches the expected HMAC of the password, the static asset is served. Otherwise the request is redirected to `/login`, which shows a themed login page. Submitting the correct password sets a signed cookie (HttpOnly, Secure, SameSite=Lax, 30-day life). `/logout` clears it.
-
-The password is read from `env.SITE_PASSWORD`. It is **not** in the source code, **not** in `wrangler.jsonc`. Local dev reads `.dev.vars`. Production reads a Cloudflare secret.
-
-This is a soft gate, not enterprise auth. Anyone with the password gets in. No accounts, no audit log, no rate limit. Fit for a holding page; not fit for a deal room.
 
 ## Preview locally
 
-You want the full thing — worker + gate + site — so use wrangler dev (not python http.server, which serves files raw without the password gate).
+Pure static files, so any static server works:
 
 ```bash
-cd "~/Desktop/Claude Projects/Calpe Capital/Website"
-
-# First time only — install wrangler
-npm install
-
-# Set a local password
-cp .dev.vars.example .dev.vars
-# Edit .dev.vars and change SITE_PASSWORD to whatever you like
-
-# Run the dev server
-npm run dev
+cd ~/Code/calpe-capital-website/public
+python3 -m http.server 8000
 ```
 
-Then visit `http://127.0.0.1:8787`. You'll see the login screen. Enter the password from `.dev.vars` — you're in.
-
-To reset your local session: `http://127.0.0.1:8787/logout`.
+Then visit `http://127.0.0.1:8000`.
 
 ## Editing copy
 
-Open `index.html` in TextEdit (plain-text mode), Cursor, or VS Code. Each section is clearly commented (`<!-- HERO -->`, `<!-- ABOUT -->`, etc.). The body of each sits inside its `<section>` block.
+Open `public/index.html` in Cursor or VS Code. Each section is clearly
+commented (`<!-- HERO -->`, `<!-- ABOUT -->`, etc.). The body of each sits
+inside its `<section>` block.
 
-If you change the nav links, change them in both the desktop nav (`<ul class="nav-links">`) and the mobile nav (`<div class="mobile-nav">`).
+If you change the nav links, change them in both the desktop nav
+(`<ul class="nav-links">`) and the mobile nav (`<div class="mobile-nav">`).
 
 ## Editing colours and type
 
-All theme colours live at the top of `assets/style.css` under `:root`. Change a hex value there and the whole site updates.
+All theme colours live at the top of `public/assets/style.css` under `:root`.
+Change a hex value there and the whole site updates.
 
-Type is self-hosted (Cormorant Garamond + Inter variable woff2, latin subset) in `assets/fonts/`, declared in `assets/fonts.css` and shared by the site and the login page. To swap the pairing, replace the woff2 files and update `fonts.css`.
+Type is self-hosted (Cormorant Garamond + Inter variable woff2, latin subset)
+in `public/assets/fonts/`, declared in `public/assets/fonts.css`. To swap the
+pairing, replace the woff2 files and update `fonts.css`.
 
 ## Deploying calpecapital.co.uk
 
-The site now deploys as a Cloudflare **Worker** (not a Pages drag-and-drop) because the password gate runs inside the worker. The flow is:
+Hosting is **Cloudflare Pages**, project `calpe-capital-site`. Every push to
+`main` triggers `.github/workflows/deploy.yml`, which runs
+`wrangler pages deploy public` and publishes the `public/` folder. No manual
+step, no drag-and-drop.
+
+The workflow needs two repo secrets:
+
+- `CLOUDFLARE_API_TOKEN` — a scoped token with **Cloudflare Pages: Edit**.
+- `CLOUDFLARE_ACCOUNT_ID` — `d4df51783b85b94b0a9815cc51069ceb`.
+
+The custom domain `calpecapital.co.uk` is attached to the Pages project under
+**Custom domains** in the Cloudflare dashboard.
+
+To deploy by hand if needed:
 
 ```bash
-cd "~/Desktop/Claude Projects/Calpe Capital/Website"
-
-# First time only
-npx wrangler login
-
-# Set the production password (you'll be prompted to type it)
-npm run secret:set
-
-# Deploy
-npm run deploy
+npx wrangler@4 pages deploy public --project-name calpe-capital-site
 ```
 
-The first deploy gives you a `calpe-capital.<account>.workers.dev` URL. Visit it to confirm the gate works, then attach the custom domain below.
-
-To change the password later: `npm run secret:set` again, then `npm run deploy`.
-
-### 2. Point calpecapital.co.uk at it (Namecheap DNS steps)
-
-In Cloudflare Pages, open the **Custom domains** tab and click **Set up a custom domain**. Add `calpecapital.co.uk` first. Cloudflare will tell you to add a CNAME record. It will look something like:
-
-```
-Type: CNAME
-Name: @  (or calpecapital.co.uk)
-Target: calpe-capital.pages.dev  (whatever Cloudflare gives you)
-```
-
-Then repeat for `www.calpecapital.co.uk` — same idea, with `Name: www`.
-
-**At Namecheap:**
-
-1. Log in to [namecheap.com](https://namecheap.com) and go to **Domain List**.
-2. Click **Manage** next to `calpecapital.co.uk`.
-3. Open the **Advanced DNS** tab.
-4. Under **Host Records**, remove any existing default records (Namecheap usually adds a parking-page URL redirect — delete it).
-5. Click **Add New Record** and create:
-   - **Type:** CNAME Record, **Host:** `@`, **Value:** the `*.pages.dev` target Cloudflare gave you, **TTL:** Automatic.
-   - **Type:** CNAME Record, **Host:** `www`, **Value:** same target, **TTL:** Automatic.
-6. Save (the green tick on each row).
-7. Back in Cloudflare Pages, click **Activate** / **Verify** on each custom domain. It will turn green once DNS propagates (10 to 30 minutes typically).
-
-Cloudflare issues the SSL certificate automatically once it can see the DNS records.
-
-If Namecheap rejects the CNAME at the apex (`@`) — some registrars don't allow CNAME at the root — use **ALIAS** or **URL Redirect** type instead, or follow the A-record fallback Cloudflare offers in the same panel.
-
-## Pushing updates later
-
-Edit the file(s), then:
-
-```bash
-npm run deploy
-```
-
-### GitHub Actions auto-deploy (currently broken)
-
-`.github/workflows/deploy.yml` deploys on every push to main, but the
-`CLOUDFLARE_API_TOKEN` repo secret holds a **global API key**, which wrangler
-rejects (`Authentication error [code: 10000]`). To fix: in the Cloudflare
-dashboard go to My Profile → API Tokens → Create Token → "Edit Cloudflare
-Workers" template, then replace the `CLOUDFLARE_API_TOKEN` secret on the
-GitHub repo with that token. The `CLOUDFLARE_EMAIL` secret can be deleted.
-Until then, deploy locally with `npm run deploy`.
-
-That's it. Cloudflare swaps to the new version in seconds. No drag-and-drop. To roll back, run `npx wrangler rollback`.
-
-### Once the gate is gone
-
-When you've finished rejigging and don't want the password gate any more, two options:
-
-1. **Remove the gate, keep the worker** — empty `src/worker.js` so it always calls `env.ASSETS.fetch(request)`. Cheapest change.
-2. **Remove the worker entirely** — delete `main` from `wrangler.jsonc`, delete the `binding` line under `assets`, delete `src/`. The site becomes pure static assets again.
-
-Either way, run `npx wrangler secret delete SITE_PASSWORD` afterwards.
+To roll back, redeploy a previous commit, or use the **Deployments** tab of the
+Pages project in the dashboard.
 
 ## Things to check before going live
 
 1. Open every section on your phone. Tap the menu. Tap every link.
 2. Click every nav anchor. Each one should scroll smoothly to the section.
 3. Click the email and phone in the Contact card — confirm they open Mail and the dialler.
-4. Read every line of copy on a fresh pair of eyes.
+4. Read every line of copy with a fresh pair of eyes.
 5. Decide whether the small "Calpe Capital · Registered in England and Wales · Co. No. 17193795" footer line is right (Companies House registered name and number).
 
 ## What it does not have
 
-- A backend contact form. The contact section lists email and phone only — clean, no spam, no GDPR overhead.
-- Photography. Visual texture is handled with type, gradients, and a subtle paper grain overlay.
+- A password gate. The site is public.
+- A backend contact form. The contact section lists email and phone only.
 - A blog. Easy to add later as a `/insights` section if it becomes useful.
