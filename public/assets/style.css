@@ -1077,3 +1077,47 @@ a.contact-value:hover { color: var(--accent-deep); }
 @media (max-width: 760px) {
   .practice-body { grid-template-columns: 1fr; gap: 0.75rem; }
 }
+
+
+/* =========================================================================
+   Hero mist, restored 27/07/2026. The one animation the hero keeps:
+   two seamless noise tiles drifting in opposite directions over the
+   waterline. Transform-only so it composites on the GPU; the global
+   reduced-motion override freezes it into still haze.
+   ========================================================================= */
+
+.hero-mist {
+  position: absolute;
+  left: 0; right: 0; bottom: -2%;
+  height: 42%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-mist-layer {
+  position: absolute;
+  top: 0; bottom: 0;
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  background-size: 1024px 100%;
+  will-change: transform;
+}
+
+.hero-mist-layer--far {
+  left: 0;
+  width: calc(100% + 1024px);
+  background-image: url('img/mist-b.png');
+  opacity: 0.5;
+  animation: mistDriftLeft 110s linear infinite;
+}
+
+.hero-mist-layer--near {
+  left: -1024px;
+  width: calc(100% + 1024px);
+  background-image: url('img/mist-a.png');
+  opacity: 0.62;
+  animation: mistDriftRight 70s linear infinite;
+}
+
+@keyframes mistDriftLeft  { to { transform: translate3d(-1024px, 0, 0); } }
+@keyframes mistDriftRight { to { transform: translate3d(1024px, 0, 0); } }
