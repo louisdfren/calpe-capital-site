@@ -1,5 +1,5 @@
 /* =========================================================================
-   Calpe Capital — single-page site
+   Calpe Capital: single-page site
    Warm cream ground, deep ink, restrained bronze accent.
    ========================================================================= */
 
@@ -150,7 +150,7 @@ p:last-child { margin-bottom: 0; }
 
 .section--bleed { padding-top: clamp(3rem, 6vw, 5rem); }
 
-/* About + the metrics strip that follows form one intro "deck" — lift both
+/* About + the metrics strip that follows form one intro "deck": lift both
    to cream-soft together so the eye reads them as a single block, then
    returns to default cream for the Practice section. */
 .section--bleed,
@@ -372,7 +372,7 @@ p:last-child { margin-bottom: 0; }
   z-index: 0;
 }
 
-/* Hero image plate — Mons Calpe, anchored right, dissolving into the cream
+/* Hero image plate: Mons Calpe, anchored right, dissolving into the cream
    ground so the headline keeps its clear left field. */
 .hero-art {
   position: absolute;
@@ -380,7 +380,7 @@ p:last-child { margin-bottom: 0; }
   width: min(58vw, 980px);
   margin: 0;
   overflow: hidden;
-  /* Feather the figure's own left edge — without this, the compositing
+  /* Feather the figure's own left edge. Without this, the compositing
      boundary antialiases against the flat cream as a faint vertical line. */
   -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 12%);
   mask-image: linear-gradient(to right, transparent 0%, #000 12%);
@@ -964,7 +964,7 @@ a.contact-value:hover { color: var(--accent-deep); }
   .nav-links { display: none; }
   .nav-burger { display: inline-flex; }
   .mobile-nav.is-open { display: block; }
-  .site-header.is-open { background: rgba(244, 238, 226, 0.96); backdrop-filter: saturate(180%) blur(18px); }
+  .site-header.is-open { background: rgba(244, 238, 226, 0.96); backdrop-filter: saturate(180%) blur(18px); -webkit-backdrop-filter: saturate(180%) blur(18px); }
   .nav-cta { display: none; }
 
   .two-col { grid-template-columns: 1fr; }
