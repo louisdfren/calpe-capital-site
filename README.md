@@ -1,161 +1,92 @@
-# Calpe Capital website — handover notes
+# Calpe Capital website
 
-Single-page static site, password-gated by a Cloudflare Worker that sits in front of the assets.
+Single-page static site for Calpe Capital Limited, live and public at calpecapital.co.uk. A small Cloudflare Worker serves the files in `public/`. Rewritten 16/11/2026; the earlier version described a password gate that was removed on 27/07/2026.
 
 ## Folder
 
 ```
-Website/
+calpe-capital-website/
 ├── public/
-│   ├── index.html        The whole site (hero, stats, about, partners, what we do, sectors, principles, contact)
+│   ├── index.html        The whole site: hero, stats, about, partners, what we do,
+│   │                     sectors, selected work, how we work, contact
+│   ├── robots.txt, sitemap.xml, apple-touch-icon.png
 │   └── assets/
-│       ├── style.css     All styles (light cream theme, mobile responsive)
-│       ├── site.js       Sticky nav, scroll-reveal, hero word-stagger, mobile menu, parallax
-│       ├── img/          Generated brand imagery (Higgsfield AI, June 2026)
-│       │   ├── hero-calpe.jpg        Hero — Mons Calpe rising from sea mist
-│       │   ├── og-calpe.jpg          1200×630 link-share image (og:image)
-│       │   └── sector-*.jpg          Sector card plates (roadside / hospitality / mixed-use)
-│       └── logos/        Calpe logo SVGs and PNGs
-├── mocks/                Old anime.js motion experiment (not deployed, predates Partners section)
-├── src/
-│   └── worker.js         Password gate + login page (Cloudflare Worker)
-├── wrangler.jsonc        Cloudflare deploy config
-├── package.json          dev / deploy scripts
-├── .dev.vars             local password (gitignored, do not commit)
-├── .dev.vars.example     template — copy to .dev.vars
-└── README.md             this file
+│       ├── style.css     All styles. Later passes are appended at the foot.
+│       ├── site.js       Sticky header state, mobile menu, anchor offset
+│       ├── fonts.css     Self-hosted font declarations
+│       ├── fonts/        Cormorant Garamond and Inter, variable woff2
+│       ├── img/          Hero (the Rock), mist layers, share image, sector plates
+│       ├── team/         Partner headshots
+│       └── logos/        Logo SVGs and PNGs
+├── src/worker.js         Serves public/; redirects the old /login and /logout home
+├── wrangler.jsonc        Cloudflare Worker config (name: calpe-capital)
+├── package.json          dev and deploy scripts
+├── .github/workflows/deploy.yml   Deploys on every push to main
+├── mocks/                Old motion experiment, not deployed
+└── CLAUDE.md             Conventions for Claude sessions
 ```
 
-## Password gate — how it works
-
-Every request hits the worker first. If the cookie `cc_auth` matches the expected HMAC of the password, the static asset is served. Otherwise the request is redirected to `/login`, which shows a themed login page. Submitting the correct password sets a signed cookie (HttpOnly, Secure, SameSite=Lax, 30-day life). `/logout` clears it.
-
-The password is read from `env.SITE_PASSWORD`. It is **not** in the source code, **not** in `wrangler.jsonc`. Local dev reads `.dev.vars`. Production reads a Cloudflare secret.
-
-This is a soft gate, not enterprise auth. Anyone with the password gets in. No accounts, no audit log, no rate limit. Fit for a holding page; not fit for a deal room.
+`.dev.vars`, `.dev.vars.example` and the `secret:set` script are leftovers from the old password gate. The Worker no longer reads `SITE_PASSWORD`.
 
 ## Preview locally
 
-You want the full thing — worker + gate + site — so use wrangler dev (not python http.server, which serves files raw without the password gate).
+The site is plain static files, so any static server works:
 
 ```bash
-cd "~/Desktop/Claude Projects/Calpe Capital/Website"
+python3 -m http.server 8765 --directory public
+```
 
-# First time only — install wrangler
+Then open `http://localhost:8765`. To run it through the Worker as production does:
+
+```bash
 npm install
+```
 
-# Set a local password
-cp .dev.vars.example .dev.vars
-# Edit .dev.vars and change SITE_PASSWORD to whatever you like
-
-# Run the dev server
+```bash
 npm run dev
 ```
 
-Then visit `http://127.0.0.1:8787`. You'll see the login screen. Enter the password from `.dev.vars` — you're in.
+## Editing
 
-To reset your local session: `http://127.0.0.1:8787/logout`.
+Each section in `public/index.html` is marked with a comment (`<!-- HERO -->`, `<!-- ABOUT -->` and so on). If you change the nav links, change them in both the desktop nav (`<ul class="nav-links">`) and the mobile nav (`<div class="mobile-nav">`).
 
-## Editing copy
+Theme colours live at the top of `assets/style.css` under `:root`. The brand reference is `Entities/Calpe Capital/Brand/brand-guidelines.md` in the Claude Projects folder. Fonts are self-hosted; never load them from Google.
 
-Open `index.html` in TextEdit (plain-text mode), Cursor, or VS Code. Each section is clearly commented (`<!-- HERO -->`, `<!-- ABOUT -->`, etc.). The body of each sits inside its `<section>` block.
+This is public copy. British English, no em dashes, and no figure without a source.
 
-If you change the nav links, change them in both the desktop nav (`<ul class="nav-links">`) and the mobile nav (`<div class="mobile-nav">`).
+## Deploying
 
-## Editing colours and type
-
-All theme colours live at the top of `assets/style.css` under `:root`. Change a hex value there and the whole site updates.
-
-Type is self-hosted (Cormorant Garamond + Inter variable woff2, latin subset) in `assets/fonts/`, declared in `assets/fonts.css` and shared by the site and the login page. To swap the pairing, replace the woff2 files and update `fonts.css`.
-
-## Deploying calpecapital.co.uk
-
-The site now deploys as a Cloudflare **Worker** (not a Pages drag-and-drop) because the password gate runs inside the worker. The flow is:
+Every push to `main` runs the GitHub Action, which runs `npx wrangler deploy` and publishes the Worker. It last ran green on 16/11/2026. Check the run before calling a deploy done:
 
 ```bash
-cd "~/Desktop/Claude Projects/Calpe Capital/Website"
-
-# First time only
-npx wrangler login
-
-# Set the production password (you'll be prompted to type it)
-npm run secret:set
-
-# Deploy
-npm run deploy
+gh run list --branch main --limit 1
 ```
 
-The first deploy gives you a `calpe-capital.<account>.workers.dev` URL. Visit it to confirm the gate works, then attach the custom domain below.
+Then confirm against the live site, not the push:
 
-To change the password later: `npm run secret:set` again, then `npm run deploy`.
-
-### 2. Point calpecapital.co.uk at it (Namecheap DNS steps)
-
-In Cloudflare Pages, open the **Custom domains** tab and click **Set up a custom domain**. Add `calpecapital.co.uk` first. Cloudflare will tell you to add a CNAME record. It will look something like:
-
-```
-Type: CNAME
-Name: @  (or calpecapital.co.uk)
-Target: calpe-capital.pages.dev  (whatever Cloudflare gives you)
+```bash
+curl -s -o /dev/null -w "%{http_code}\n" https://calpecapital.co.uk/
 ```
 
-Then repeat for `www.calpecapital.co.uk` — same idea, with `Name: www`.
-
-**At Namecheap:**
-
-1. Log in to [namecheap.com](https://namecheap.com) and go to **Domain List**.
-2. Click **Manage** next to `calpecapital.co.uk`.
-3. Open the **Advanced DNS** tab.
-4. Under **Host Records**, remove any existing default records (Namecheap usually adds a parking-page URL redirect — delete it).
-5. Click **Add New Record** and create:
-   - **Type:** CNAME Record, **Host:** `@`, **Value:** the `*.pages.dev` target Cloudflare gave you, **TTL:** Automatic.
-   - **Type:** CNAME Record, **Host:** `www`, **Value:** same target, **TTL:** Automatic.
-6. Save (the green tick on each row).
-7. Back in Cloudflare Pages, click **Activate** / **Verify** on each custom domain. It will turn green once DNS propagates (10 to 30 minutes typically).
-
-Cloudflare issues the SSL certificate automatically once it can see the DNS records.
-
-If Namecheap rejects the CNAME at the apex (`@`) — some registrars don't allow CNAME at the root — use **ALIAS** or **URL Redirect** type instead, or follow the A-record fallback Cloudflare offers in the same panel.
-
-## Pushing updates later
-
-Edit the file(s), then:
+A healthy result is 200. If the Action fails, the manual fallback is:
 
 ```bash
 npm run deploy
 ```
 
-### GitHub Actions auto-deploy (currently broken)
+To roll back:
 
-`.github/workflows/deploy.yml` deploys on every push to main, but the
-`CLOUDFLARE_API_TOKEN` repo secret holds a **global API key**, which wrangler
-rejects (`Authentication error [code: 10000]`). To fix: in the Cloudflare
-dashboard go to My Profile → API Tokens → Create Token → "Edit Cloudflare
-Workers" template, then replace the `CLOUDFLARE_API_TOKEN` secret on the
-GitHub repo with that token. The `CLOUDFLARE_EMAIL` secret can be deleted.
-Until then, deploy locally with `npm run deploy`.
+```bash
+npx wrangler rollback
+```
 
-That's it. Cloudflare swaps to the new version in seconds. No drag-and-drop. To roll back, run `npx wrangler rollback`.
+DNS for calpecapital.co.uk is on Cloudflare. Dashboard-only jobs (API tokens, moving the custom domain) are done by Louis by hand.
 
-### Once the gate is gone
+## Open item
 
-When you've finished rejigging and don't want the password gate any more, two options:
-
-1. **Remove the gate, keep the worker** — empty `src/worker.js` so it always calls `env.ASSETS.fetch(request)`. Cheapest change.
-2. **Remove the worker entirely** — delete `main` from `wrangler.jsonc`, delete the `binding` line under `assets`, delete `src/`. The site becomes pure static assets again.
-
-Either way, run `npx wrangler secret delete SITE_PASSWORD` afterwards.
-
-## Things to check before going live
-
-1. Open every section on your phone. Tap the menu. Tap every link.
-2. Click every nav anchor. Each one should scroll smoothly to the section.
-3. Click the email and phone in the Contact card — confirm they open Mail and the dialler.
-4. Read every line of copy on a fresh pair of eyes.
-5. Decide whether the small "Calpe Capital · Registered in England and Wales · Co. No. 17193795" footer line is right (Companies House registered name and number).
+Draft PR #2 would move the site from the Worker to plain Cloudflare Pages. It is unmerged as of 16/11/2026. The site is already public, so the PR only changes the host.
 
 ## What it does not have
 
-- A backend contact form. The contact section lists email and phone only — clean, no spam, no GDPR overhead.
-- Photography. Visual texture is handled with type, gradients, and a subtle paper grain overlay.
-- A blog. Easy to add later as a `/insights` section if it becomes useful.
+- A contact form. The contact section lists email, phone and office only.
+- A blog.
